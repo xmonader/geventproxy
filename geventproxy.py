@@ -20,6 +20,7 @@ def copy(srcsocket, destsocket):
 def proxy_to(endpoint, clientsocket, address):
     destsocket = socket.create_connection(endpoint)
     while not clientsocket.closed or not destsocket.closed:
+        # credits to @grimpy
         readable, _, _ = select.select([clientsocket, destsocket], [], [], 0.1)
         for ready_to_read in readable:
             if ready_to_read == clientsocket:
@@ -47,9 +48,9 @@ def make_tcp_proxy(server_addr, dest_ddr):
 
 
 if __name__ == "__main__":
-    listenining_addr = ("127.0.0.1", 1600)
+    listening_addr = ("127.0.0.1", 1600)
     dest_addr = ("127.0.0.1", 8080)
-    print(f"Starting proxy server on http://{listenining_addr[0]}:{listenining_addr[1]} ..")
+    print(f"Starting proxy server on http://{listening_addr[0]}:{listening_addr[1]} ..")
 
-    server = make_tcp_proxy(listenining_addr, dest_addr)
+    server = make_tcp_proxy(listening_addr, dest_addr)
     server.serve_forever()
